@@ -139,11 +139,20 @@ The system prompt explicitly forbids the model from using external knowledge and
 
 ## Future Improvements
 
-1. **Hybrid search**: Combine dense (FAISS) retrieval with sparse BM25 for better recall on keyword-heavy queries.
-2. **Re-ranking**: Add a cross-encoder re-ranker (e.g. `cross-encoder/ms-marco-MiniLM`) to re-score the top-k chunks before passing them to the LLM.
-3. **Streaming**: Stream the LLM response in the CLI and API for a better UX.
-4. **Metadata filtering**: Tag chunks with section headers (e.g. "Disclosure Requirements") and allow filtered retrieval.
-5. **Caching**: Cache embedding calls for repeated queries to reduce cost.
-6. **Evaluation dataset**: Expand `GROUND_TRUTH` in `evaluation.py` for more robust experiments.
-7. **Chroma alternative**: Swap FAISS for Chroma for built-in persistence and metadata support without custom pickling.
-8. **Async API**: Use `async` OpenAI client in `api.py` for higher throughput.
+1. **Improve retrieval using regulatory structure**
+   The FAQ shows that answers are often tied to specific concepts like eligibility, alignment, DNSH, and reporting KPIs (turnover, CapEx, OpEx). I’d like to restructure chunking to better preserve these legal/semantic groupings instead of generic sliding windows.
+
+2. **Better handling of “interpretation-style” questions**
+   The FAQ is mostly about clarifying definitions and edge cases. I’d want the QA chain to explicitly detect when a question is asking for interpretation vs factual lookup, and adjust prompting accordingly.
+
+3. **Metadata-aware retrieval**
+   Many FAQ answers are structured around topics (e.g. disclosures, technical screening criteria, environmental objectives). Adding metadata tags to chunks (rather than only raw text) could improve filtering and relevance.
+
+4. **Evaluation based on compliance-style questions**
+   Instead of generic QA tests, I’d build evaluation questions that mirror real taxonomy reporting scenarios (eligibility vs alignment, DNSH exceptions, reporting scope differences).
+
+5. **Improve answer grounding for regulatory content**
+   I’d likely tighten the prompt to force clearer separation between:
+   - what the regulation explicitly says
+   - what is interpretation or explanation from the model
+   This reduces the risk of over-confident regulatory “hallucinations”.
