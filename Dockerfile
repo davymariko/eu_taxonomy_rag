@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY data/ data/
 COPY src/ src/
 
-# Persist vector store
+# Keeps vector store
 VOLUME ["/app/vectorstore"]
 
 # Run CLI

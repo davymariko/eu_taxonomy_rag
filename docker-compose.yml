@@ -1,17 +1,23 @@
 services:
   ingest:
     build: .
+    image: eu-taxonomy-rag
     env_file: .env
     volumes:
+      - ./src:/app/src
+      - ./data:/app/data
       - vectorstore:/app/vectorstore
-    command: python src/ingest.py
+    command: python src/ingest.py      # run with: docker compose --profile ingest up ingest
     profiles:
-      - ingest           # run with: docker compose --profile ingest up ingest
+      - ingest
 
   cli:
     build: .
+    image: eu-taxonomy-rag
     env_file: .env
     volumes:
+      - ./src:/app/src
+      - ./data:/app/data
       - vectorstore:/app/vectorstore
     stdin_open: true
     tty: true
@@ -19,14 +25,17 @@ services:
 
   api:
     build: .
+    image: eu-taxonomy-rag
     env_file: .env
     volumes:
+      - ./src:/app/src
+      - ./data:/app/data
       - vectorstore:/app/vectorstore
     ports:
       - "8000:8000"
     environment:
       - PYTHONPATH=/app/src
-    command: uvicorn api:app --host 0.0.0.0 --port 8000   # run with: docker compose run api
+    command: uvicorn api:app --host 0.0.0.0 --port 8000 --reload   # run with: docker compose run up api
 
 volumes:
   vectorstore:

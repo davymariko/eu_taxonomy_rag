@@ -1,13 +1,3 @@
-"""
-ingest.py
----------
-Loads the FAQ markdown, splits it into overlapping token chunks,
-generates embeddings via OpenAI, and persists a FAISS index to disk.
-"""
-
-from __future__ import annotations
-
-import os
 import pickle
 from pathlib import Path
 from typing import List
@@ -17,7 +7,7 @@ import numpy as np
 import tiktoken
 from openai import OpenAI
 
-# ── Constants ──────────────────────────────────────────────────────────────────
+
 EMBEDDING_MODEL = "text-embedding-3-large"
 EMBEDDING_DIM = 3072          # dimensionality of text-embedding-3-large
 DEFAULT_CHUNK_TOKENS = 400
@@ -28,7 +18,7 @@ INDEX_PATH = VECTORSTORE_DIR / "faiss.index"
 CHUNKS_PATH = VECTORSTORE_DIR / "chunks.pkl"
 
 
-# ── Tokeniser helper ───────────────────────────────────────────────────────────
+# Tokeniser
 def _get_encoder() -> tiktoken.Encoding:
     return tiktoken.get_encoding("cl100k_base")
 
@@ -37,13 +27,13 @@ def count_tokens(text: str) -> int:
     return len(_get_encoder().encode(text))
 
 
-# ── Text loading ───────────────────────────────────────────────────────────────
+# Text loading
 def load_markdown(path: str | Path) -> str:
     """Read a markdown file and return its text."""
     return Path(path).read_text(encoding="utf-8")
 
 
-# ── Chunking ───────────────────────────────────────────────────────────────────
+# Chunking
 def split_into_chunks(
     text: str,
     chunk_tokens: int = DEFAULT_CHUNK_TOKENS,
@@ -75,7 +65,7 @@ def split_into_chunks(
     return chunks
 
 
-# ── Embeddings ─────────────────────────────────────────────────────────────────
+# Embeddings
 def embed_texts(texts: List[str], client: OpenAI) -> np.ndarray:
     """
     Embed a list of strings using the OpenAI Embeddings API.
@@ -89,7 +79,7 @@ def embed_texts(texts: List[str], client: OpenAI) -> np.ndarray:
     return np.array(vectors, dtype=np.float32)
 
 
-# ── FAISS persistence ──────────────────────────────────────────────────────────
+# FAISS persistence
 def build_and_save_index(
     chunks: List[str],
     embeddings: np.ndarray,

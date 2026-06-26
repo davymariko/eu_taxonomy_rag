@@ -1,12 +1,3 @@
-"""
-qa_chain.py
------------
-Combines retrieved context chunks with a strict anti-hallucination prompt
-and calls the OpenAI Chat Completions API to generate a grounded answer.
-"""
-
-from __future__ import annotations
-
 from typing import List
 
 from openai import OpenAI
@@ -34,7 +25,7 @@ Answer:"""
 
 
 class QAChain:
-    """RAG question-answering chain."""
+    """RAG question-answer chain."""
 
     def __init__(self, model: str = CHAT_MODEL) -> None:
         self.client = OpenAI()
