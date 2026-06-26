@@ -1,0 +1,32 @@
+services:
+  ingest:
+    build: .
+    env_file: .env
+    volumes:
+      - vectorstore:/app/vectorstore
+    command: python src/ingest.py
+    profiles:
+      - ingest           # run with: docker compose --profile ingest up ingest
+
+  cli:
+    build: .
+    env_file: .env
+    volumes:
+      - vectorstore:/app/vectorstore
+    stdin_open: true
+    tty: true
+    command: python src/app.py    # run with: docker compose run cli
+
+  api:
+    build: .
+    env_file: .env
+    volumes:
+      - vectorstore:/app/vectorstore
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app/src
+    command: uvicorn api:app --host 0.0.0.0 --port 8000   # run with: docker compose run api
+
+volumes:
+  vectorstore:
