@@ -55,7 +55,7 @@ User query
 ### 1. Clone and install
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/davymariko/eu_taxonomy_rag.git
 cd eu-taxonomy-rag
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
