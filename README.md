@@ -73,7 +73,7 @@ python src/ingest.py
 
 This reads `data/faq.md`, splits it into overlapping chunks (~400 tokens, 50-token overlap), embeds them with `text-embedding-3-large`, and saves a FAISS index to `vectorstore/`.
 
-### 4. Ask questions
+### 4. Scripts with flags
 
 ```bash
 python src/app.py
@@ -104,10 +104,9 @@ curl -X POST http://localhost:8000/ask \
 
 ### Build and ingest
 
-```bash
-cp .env.example .env   # set your OPENAI_API_KEY
+Create .env file in parent directory and set your OPENAI_API_KEY
 
-# Ingest (one-off)
+# Ingest
 docker compose --profile ingest up ingest
 
 # Start the API server
@@ -117,7 +116,7 @@ docker compose up api
 docker compose run cli
 ```
 
-The `vectorstore/` data is persisted in the `vectorstore` Docker volume across restarts.
+The `vectorstore/` data is persisted in the `vectorstore` Docker volume after each restart.
 
 ---
 
