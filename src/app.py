@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import argparse
 import sys
 import os
@@ -76,7 +74,7 @@ def main() -> None:
         if not question:
             continue
         if question.lower() in {"exit", "quit", "q"}:
-            print("[app] Goodbye.")
+            print("Goodbye.")
             break
 
         # Retrieve relevant chunks

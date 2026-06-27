@@ -1,11 +1,9 @@
-from __future__ import annotations
-
 from typing import List
 
 import numpy as np
 from openai import OpenAI
 
-from ingest import EMBEDDING_MODEL, EMBEDDING_DIM, load_index, embed_texts
+from ingest import load_index, embed_texts
 
 
 class Retriever:
@@ -25,7 +23,7 @@ class Retriever:
         Returns a list of strings ordered from most to least similar.
         """
         query_vec = embed_texts([query], self.client)          # (1, dim)
-        distances, indices = self.index.search(query_vec, self.top_k)
+        _, indices = self.index.search(query_vec, self.top_k)
 
         results: List[str] = []
         for idx in indices[0]:
